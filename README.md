@@ -1,1 +1,4 @@
-A app that takes in json and gives normalises it.
+JSON normaliser
+===============
+
+A app that takes in json and normalises it.
