@@ -1,4 +1,4 @@
-import os,json,shutil
+import os,json,shutil,uuid
 
 file_name = "restaurant.json" # Give the file name
 dir = os.path.dirname(__file__)
@@ -27,22 +27,26 @@ def normaliser(y):
 
     foo = {}
    # normaliser function
-    def normaliser_wrap(x,key='',lists=False):
+    def normaliser_wrap(x,key='',ids=0):
         if type(x) is dict:
             out = {}
+            outer = []
             for a in x:
                 if (type(x[a]) is dict):
-                    normaliser_wrap(x[a],key+"_"+a,lists=True)
+                    normaliser_wrap(x[a],key+"_"+a,ids=str(uuid.uuid4()))
                 elif (type(x[a]) is list):
-                    normaliser_wrap(x[a],key+"_"+a,lists=True)
+                    normaliser_wrap(x[a],key+"_"+a,ids=str(uuid.uuid4()))
                 else:
+                    if ids != 0:
+                        out["id"] = ids
                     out[a] = x[a]
+
+            outer.append(out)
             if bool(out):
-                foo[key] = out
+                foo[key] = outer
         elif type(x) is list:
-            for a in x:
-                if (type(a) is dict):
-                    normaliser_wrap(a,key,lists=True)
+            for a in x: 
+                normaliser_wrap(a,key,ids=str(uuid.uuid4()))
         else:
             print("You have an error")
         
